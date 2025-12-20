@@ -1,0 +1,17 @@
+{
+  "name": "noteme",
+  "version": "1.0.0",
+  "description": "Keep your notes here",
+  "license": "ISC",
+  "author": "Jay Parmar",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon backend/server.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "nodemon": "^3.1.11"
+  }
+}
