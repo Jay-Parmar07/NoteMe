@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Bitcount+Prop+Single:wght@100..900&family=Orbitron:wght@400..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap');
+
+.mainback {
+    min-height: 93vh;
+    display: flex;
+    padding: 10px 0;
+}
+
+.page {
+    width: 100%;
+}
+
+.heading {
+    font-size: 60px;
+    font-family: "Orbitron", sans-serif;
+    padding: 5px 10px;
+}
+
+@media only screen and (max-width: 600px) {
+
+    .heading {
+        font-size: 30px;
+        display: flex;
+        justify-content: center;
+    }
+}

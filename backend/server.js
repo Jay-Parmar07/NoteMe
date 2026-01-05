@@ -3,25 +3,61 @@
 const express = require('express');
 const notes = require('./data/notes');
 const dotenv = require('dotenv');
+const connectDB = require('./config/db');
+const userRoutes = require('./routes/userRoutes');
+const notesRoutes = require('./routes/notesRoutes');
+
+// load environment variables and override any existing ones from the OS
+dotenv.config({ override: true });
+const { notFound, errorHandler } = require('./middlewares/errorMiddlewares');
+const path = require('path');
 
 const app = express();
-dotenv.config();
 
-app.get('/', (req,res) => {
+// ensure dotenv variables are loaded (override existing env vars when needed)
+// Note: dotenv already injected variables but making override explicit can help
+// when env vars are set elsewhere (e.g., system environment)
+connectDB();
+app.use(express.json());
+
+
+
+
+
+app.use("/api/users", userRoutes);
+app.use("/api/notes", notesRoutes);
+
+// ---------------------------DEPLOYMENT-----------------------------
+
+const __dirname1 = path.resolve();
+if (process.env.NODE_ENV === "production"){
+
+  app.use(express.static(path.join(__dirname1, "/frontend/build")));
+  
+  app.get(/.*/, (req, res) =>
+    res.sendFile(
+      path.resolve(__dirname1, "frontend", "build", "index.html")
+    )
+  );
+}
+else{
+  app.get('/', (req, res) => {
   res.send('API is Running.....');
 });
-
-app.get('/api/notes', (req,res) => {
-  res.json(notes);
-});
-
-app.get("/api/notes/:id/", (req, res) => {
-  const note = notes.find((n) => n._id === req.params.id);
-  res.send(note);
-  console.log(req.params);
-  
 }
-)
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, console.log(`Server started on PORT ${PORT}`));
+// ---------------------------DEPLOYMENT-----------------------------
+
+app.use(notFound);
+app.use(errorHandler);
+
+const PORT = process.env.PORT || 5001;
+app.listen(PORT, () => { console.log(`Server started on PORT ${PORT}`) });
+
+// Log unhandled promise rejections and uncaught exceptions for easier debugging
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+});

@@ -1,17 +1,26 @@
 {
   "name": "noteme",
   "version": "1.0.0",
-  "description": "Keep your notes here",
+  "description": "Keep Your Notes Here",
   "license": "ISC",
   "author": "Jay Parmar",
   "type": "commonjs",
-  "main": "server.js",
+  "main": "backend/server.js",
   "scripts": {
-    "start": "nodemon backend/server.js"
+    "start": "node backend/server.js",
+    "server" : "nodemon backend/server.js",
+    "client": "npm start --prefix frontend",
+    "dev": "concurrently \"npm start\" \"npm run client\"",
+    "build": "npm install --legacy-peer-deps && npm install --legacy-peer-deps --prefix frontend && npm run build --prefix frontend"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "concurrently": "^9.2.1",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.0.2",
     "nodemon": "^3.1.11"
   }
 }

@@ -1,84 +1,87 @@
-Start 
-task1
--created a web server using Express.js that serves notes data from a local file. The server has endpoints to retrieve all notes and individual notes by their ID. Environment variables are managed using the dotenv package. also added a .env file to store the PORT number for the server to listen on. tested the server to ensure it responds correctly to requests. added nodemon for easier development. used postman to test the API endpoints.
-
-
-//register
 import React, { useState, useEffect } from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+// import { useDispatch, useSelector } from "react-redux";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 import ErrorMessage from "../../components/ErrorMessage";
-import { register } from "../../actions/userActions";
+// import { register } from "../../actions/userActions";
 import MainScreen from "../../components/MainScreen";
-import "./RegisterScreen.css";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../../actions/userActions";
 
-function RegisterScreen({ history }) {
+const RegisterScreen = () => {
+
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [pic, setPic] = useState(
+  const [picture, setPicture] = useState(
     "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
   );
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
-  const [picMessage, setPicMessage] = useState(null);
+  const [pictureMessage, setPictureMessage] = useState(null);
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const userRegister = useSelector((state) => state.userRegister);
   const { loading, error, userInfo } = userRegister;
 
-  const postDetails = (pics) => {
-    if (
-      pics ===
-      "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
-    ) {
-      return setPicMessage("Please Select an Image");
+  useEffect(() => {
+    if (userInfo) {
+      navigate("mynotes")
     }
-    setPicMessage(null);
-    if (pics.type === "image/jpeg" || pics.type === "image/png") {
+  }, [navigate, userInfo])
+
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    if (password !== confirmpassword) {
+      setMessage("Passwords do not match");
+    }
+    else {
+      dispatch(register(name, email, password, picture));
+    }
+
+  };
+
+  const postDetails = (picture) => {
+    if (!picture) {
+      return setPictureMessage("Please Select an Image");
+    }
+    setPictureMessage(null);
+
+    if (picture.type === "image/jpeg" || picture.type === "image/png") {
       const data = new FormData();
-      data.append("file", pics);
-      data.append("upload_preset", "notezipper");
-      data.append("cloud_name", "piyushproj");
-      fetch("https://api.cloudinary.com/v1_1/piyushproj/image/upload", {
-        method: "post",
-        body: data,
-      })
+      data.append("file", picture);
+      data.append("upload_preset", "NoteMe");
+      data.append("cloud_name", "jayparmar");
+      fetch("https://api.cloudinary.com/v1_1/jayparmar/image/upload",
+        {
+          method: "post",
+          body: data,
+        })
         .then((res) => res.json())
         .then((data) => {
-          setPic(data.url.toString());
+          console.log(data);
+          setPicture(data.url.toString());
         })
         .catch((err) => {
           console.log(err);
         });
     } else {
-      return setPicMessage("Please Select an Image");
+      return setPictureMessage("Please Select an Image of Correct format");
     }
-  };
-
-  useEffect(() => {
-    if (userInfo) {
-      history.push("/");
-    }
-  }, [history, userInfo]);
-
-  const submitHandler = (e) => {
-    e.preventDefault();
-
-    if (password !== confirmpassword) {
-      setMessage("Passwords do not match");
-    } else dispatch(register(name, email, password, pic));
   };
 
   return (
+
     <MainScreen title="REGISTER">
       <div className="loginContainer">
-        {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
-        {message && <ErrorMessage variant="danger">{message}</ErrorMessage>}
+        {error && <ErrorMessage variant='danger'>{error}</ErrorMessage>}
+        {message && <ErrorMessage variant='danger'>{message}</ErrorMessage>}
         {loading && <Loading />}
+
         <Form onSubmit={submitHandler}>
           <Form.Group controlId="name">
             <Form.Label>Name</Form.Label>
@@ -120,17 +123,17 @@ function RegisterScreen({ history }) {
             />
           </Form.Group>
 
-          {picMessage && (
-            <ErrorMessage variant="danger">{picMessage}</ErrorMessage>
+          {pictureMessage && (
+            <ErrorMessage variant="danger">{pictureMessage}</ErrorMessage>
           )}
           <Form.Group controlId="pic">
             <Form.Label>Profile Picture</Form.Label>
-            <Form.File
+            <Form.Control
               onChange={(e) => postDetails(e.target.files[0])}
               id="custom-file"
-              type="image/png"
+              type="file"
               label="Upload Profile Picture"
-              custom
+            // accept="image/*"
             />
           </Form.Group>
 
@@ -145,7 +148,7 @@ function RegisterScreen({ history }) {
         </Row>
       </div>
     </MainScreen>
-  );
+  )
+    ;
 }
-
 export default RegisterScreen;
