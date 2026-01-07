@@ -1,151 +1,179 @@
-Start 
-task1
--created a web server using Express.js that serves notes data from a local file. The server has endpoints to retrieve all notes and individual notes by their ID. Environment variables are managed using the dotenv package. also added a .env file to store the PORT number for the server to listen on. tested the server to ensure it responds correctly to requests. added nodemon for easier development. used postman to test the API endpoints.
+# 📝 NoteMe – Full Stack MERN Notes Application
+
+NoteMe is a full-stack MERN (MongoDB, Express, React, Node.js) application that allows users to securely create, manage, update, and delete personal notes.
+The project includes authentication, profile management, Redux state management, and production-ready deployment configuration.
+This project was developed end-to-end — from local development to cloud deployment — as a complete learning and implementation experience.
+
+## 🖼️ Screenshots
+### Home Screen
+![Landing Page](screenshots/landingpage.png)
+
+### 🔐 Login & Registration
+![Login Page](screenshots/login.png)
+![Register Page](screenshots/register.png)
+
+### 📝 My Notes Dashboard
+![My Notes](screenshots/mynotes.png)
+
+### ✍️ Create & Edit Notes
+![Create Note](screenshots/createnote.png)
+![Edit Note](screenshots/editnote.png)
+
+### 👤 User Profile
+![Profile Screen](screenshots/profile.png)
+
+## 🌍 Live Demo
+
+🚀 The application is live and deployed on Render:
+
+👉 **Live URL:** [https://noteme.onrender.com](https://note-me-cjob.onrender.com/)
+
+> ⚠️ Note: The app may take a few seconds to load initially due to free-tier cold start.
 
 
-//register
-import React, { useState, useEffect } from "react";
-import { Form, Button, Row, Col } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import Loading from "../../components/Loading";
-import ErrorMessage from "../../components/ErrorMessage";
-import { register } from "../../actions/userActions";
-import MainScreen from "../../components/MainScreen";
-import "./RegisterScreen.css";
+## 🚀 Core Features :
+1. 🔐 User Authentication (Register / Login / Logout)
+2. 📝 Create, Read, Update & Delete Notes
+3. 🔍 Search Notes by Title
+4. 👤 User Profile Management
+5. 🖼️ Profile Picture Upload (Cloudinary)
+6. 🔑 JWT-based Authorization
+7. 🧠 Redux for Global State Management
+8. 🌐 RESTful API Architecture
+9. ⚙️ Production-ready Deployment Setup
 
-function RegisterScreen({ history }) {
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [pic, setPic] = useState(
-    "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
-  );
-  const [password, setPassword] = useState("");
-  const [confirmpassword, setConfirmPassword] = useState("");
-  const [message, setMessage] = useState(null);
-  const [picMessage, setPicMessage] = useState(null);
+## 🛠️ Tech Stack :
+### Frontend 
+- React
+- Redux
+- React Router DOM
+- Bootstrap
+- Axios
 
-  const dispatch = useDispatch();
+### Backend 
+- Node.js
+- Express.js
+- MongoDB Atlas
+- Mongoose
+- JSON Web Tokens (JWT)
+- bcryptjs
 
-  const userRegister = useSelector((state) => state.userRegister);
-  const { loading, error, userInfo } = userRegister;
+### Deployment & Tools
+- Git & GitHub
+- Render (Production Hosting)
+- MongoDB Atlas
+- Cloudinary (Profile Images)
+- Postman (API Testing)
 
-  const postDetails = (pics) => {
-    if (
-      pics ===
-      "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
-    ) {
-      return setPicMessage("Please Select an Image");
-    }
-    setPicMessage(null);
-    if (pics.type === "image/jpeg" || pics.type === "image/png") {
-      const data = new FormData();
-      data.append("file", pics);
-      data.append("upload_preset", "notezipper");
-      data.append("cloud_name", "piyushproj");
-      fetch("https://api.cloudinary.com/v1_1/piyushproj/image/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setPic(data.url.toString());
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      return setPicMessage("Please Select an Image");
-    }
-  };
+## 📁 Project Structure
 
-  useEffect(() => {
-    if (userInfo) {
-      history.push("/");
-    }
-  }, [history, userInfo]);
+```text
+NoteMe/
+├── backend/
+│   ├── config/          # Database configuration
+│   ├── controllers/     # Business logic
+│   ├── middlewares/     # Auth & error handling
+│   ├── models/          # Mongoose schemas
+│   ├── routes/          # API routes
+│   ├── utils/           # Helper utilities
+│   └── server.js        # Express server entry
+│
+├── frontend/
+│   └── src/
+│       ├── actions/     # Redux actions
+│       ├── components/  # Reusable UI components
+│       ├── constants/   # Redux constants
+│       ├── reducers/    # Redux reducers
+│       ├── screens/     # Application pages
+│       └── store.js     # Redux store
+│
+├── package.json         # Root scripts
+├── .gitignore
+└── README.md
+```
+---
 
-  const submitHandler = (e) => {
-    e.preventDefault();
+## ⚙️ Environment Variables
+Create a .env file in the root directory:
 
-    if (password !== confirmpassword) {
-      setMessage("Passwords do not match");
-    } else dispatch(register(name, email, password, pic));
-  };
+- MONGO_URI=your_mongodb_connection_string
+- JWT_SECRET=your_jwt_secret
+- NODE_ENV=production 
+⚠️ **Important:**  
+The `.env` file is intentionally ignored and **never pushed to GitHub**.
 
-  return (
-    <MainScreen title="REGISTER">
-      <div className="loginContainer">
-        {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
-        {message && <ErrorMessage variant="danger">{message}</ErrorMessage>}
-        {loading && <Loading />}
-        <Form onSubmit={submitHandler}>
-          <Form.Group controlId="name">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              type="name"
-              value={name}
-              placeholder="Enter name"
-              onChange={(e) => setName(e.target.value)}
-            />
-          </Form.Group>
+# ▶️ Running the Project Locally
+## 1️⃣ Install Dependencies
+```
+- npm install
+- npm install --prefix frontend
+```
 
-          <Form.Group controlId="formBasicEmail">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control
-              type="email"
-              value={email}
-              placeholder="Enter email"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </Form.Group>
+## 2️⃣ Start Development Servers
+```
+- npm run dev
+```
 
-          <Form.Group controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              value={password}
-              placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </Form.Group>
+- Backend runs on: http://localhost:5000
+- Frontend runs on: http://localhost:3000
 
-          <Form.Group controlId="confirmPassword">
-            <Form.Label>Confirm Password</Form.Label>
-            <Form.Control
-              type="password"
-              value={confirmpassword}
-              placeholder="Confirm Password"
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-          </Form.Group>
+# Production Build
+- npm run build
 
-          {picMessage && (
-            <ErrorMessage variant="danger">{picMessage}</ErrorMessage>
-          )}
-          <Form.Group controlId="pic">
-            <Form.Label>Profile Picture</Form.Label>
-            <Form.File
-              onChange={(e) => postDetails(e.target.files[0])}
-              id="custom-file"
-              type="image/png"
-              label="Upload Profile Picture"
-              custom
-            />
-          </Form.Group>
+This command:
+1. Installs backend dependencies
+2. Installs frontend dependencies
+3. Builds the Rexact application into frontend/build
 
-          <Button variant="primary" type="submit">
-            Register
-          </Button>
-        </Form>
-        <Row className="py-3">
-          <Col>
-            Have an Account ? <Link to="/login">Login</Link>
-          </Col>
-        </Row>
-      </div>
-    </MainScreen>
-  );
-}
+# Deployment Configuration
+- The application is configured for production deployment on Render.
 
-export default RegisterScreen;
+## Backend (Web Service)
+
+- Build Command: npm run build
+- Start Command: npm start
+- Environment: NODE_ENV=production
+
+## Frontend
+
+- Served statically from frontend/build via Express in production.
+
+## 🔐 Authentication & Security
+
+- Passwords are securely hashed using bcrypt
+
+- JWT tokens are issued on login and used for protected routes
+
+- Authorization middleware ensures users can only access and modify their own notes
+
+- Profile updates and note updates are fully protected
+
+## 🧠 What I Learned From This Project
+
+1. Full MERN stack integration
+2. Redux architecture and state flow
+3. Secure authentication and authorization
+4. REST API design & middleware usage
+5. Debugging real-world errors (state mutation, auth issues, deployment errors)
+6. Git & GitHub version control best practices
+7. Cloud deployment using Render
+
+## Possible Future Improvements
+
+- Rich text editor for notes
+- Tags and categories
+- Pagination & sorting
+- Dark mode
+- Note sharing between users
+---
+
+# 👨‍💻 Author
+
+## Jay Parmar
+Final Year Computer Engineering Student
+Learning Full-Stack Development & Cloud Deployment
+---
+
+# ⭐ Support
+
+If you find this project helpful, feel free to ⭐ the repository.
