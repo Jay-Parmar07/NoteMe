@@ -43,32 +43,34 @@ This project was developed end-to-end — from local development to cloud deploy
 9. ⚙️ Production-ready Deployment Setup
 
 ## 🛠️ Tech Stack :
-### Frontend ->
-React
-Redux
-React Router DOM
-Bootstrap
-Axios
+### Frontend 
+- React
+- Redux
+- React Router DOM
+- Bootstrap
+- Axios
 
-### Backend ->
-Node.js
-Express.js
-MongoDB Atlas
-Mongoose
-JSON Web Tokens (JWT)
-bcryptjs
+### Backend 
+- Node.js
+- Express.js
+- MongoDB Atlas
+- Mongoose
+- JSON Web Tokens (JWT)
+- bcryptjs
 
 ### Deployment & Tools
-Git & GitHub
-Render (Production Hosting)
-MongoDB Atlas
-Cloudinary (Profile Images)
-Postman (API Testing)
+- Git & GitHub
+- Render (Production Hosting)
+- MongoDB Atlas
+- Cloudinary (Profile Images)
+- Postman (API Testing)
 
 ## 📁 Project Structure
+
+```text
 NoteMe/
 ├── backend/
-│   ├── config/          # Database connection
+│   ├── config/          # Database configuration
 │   ├── controllers/     # Business logic
 │   ├── middlewares/     # Auth & error handling
 │   ├── models/          # Mongoose schemas
@@ -88,93 +90,90 @@ NoteMe/
 ├── package.json         # Root scripts
 ├── .gitignore
 └── README.md
+```
+---
 
 ## ⚙️ Environment Variables
 Create a .env file in the root directory:
 
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
-NODE_ENV=production 
-⚠️ .env is intentionally ignored and never pushed to GitHub.
+- MONGO_URI=your_mongodb_connection_string
+- JWT_SECRET=your_jwt_secret
+- NODE_ENV=production 
+⚠️ **Important:**  
+The `.env` file is intentionally ignored and **never pushed to GitHub**.
 
 # ▶️ Running the Project Locally
 ## 1️⃣ Install Dependencies
-
-npm install
-npm install --prefix frontend
-
+```
+- npm install
+- npm install --prefix frontend
+```
 
 ## 2️⃣ Start Development Servers
-npm run dev
+```
+- npm run dev
+```
 
-Backend runs on: http://localhost:5000
-Frontend runs on: http://localhost:3000
+- Backend runs on: http://localhost:5000
+- Frontend runs on: http://localhost:3000
 
 # Production Build
-npm run build
+- npm run build
 
 This command:
-Installs backend dependencies
-Installs frontend dependencies
-Builds the Rexact application into frontend/build
+1. Installs backend dependencies
+2. Installs frontend dependencies
+3. Builds the Rexact application into frontend/build
 
 # Deployment Configuration
-The application is configured for production deployment on Render.
+- The application is configured for production deployment on Render.
 
 ## Backend (Web Service)
 
-Build Command: npm run build
-Start Command: npm start
-Environment: NODE_ENV=production
+- Build Command: npm run build
+- Start Command: npm start
+- Environment: NODE_ENV=production
 
 ## Frontend
 
-Served statically from frontend/build via Express in production.
+- Served statically from frontend/build via Express in production.
 
 ## 🔐 Authentication & Security
 
-Passwords are securely hashed using bcrypt
+- Passwords are securely hashed using bcrypt
 
-JWT tokens are issued on login and used for protected routes
+- JWT tokens are issued on login and used for protected routes
 
-Authorization middleware ensures users can only access their own notes
+- Authorization middleware ensures users can only access and modify their own notes
 
-Profile updates and note updates are fully protected
+- Profile updates and note updates are fully protected
 
 ## 🧠 What I Learned From This Project
 
-Full MERN stack integration
-
-Redux architecture and state flow
-
-Secure authentication and authorization
-
-REST API design & middleware usage
-
-Debugging real-world errors (state mutation, auth issues, deployment errors)
-
-Git & GitHub version control best practices
-
-Cloud deployment using Render
+1. Full MERN stack integration
+2. Redux architecture and state flow
+3. Secure authentication and authorization
+4. REST API design & middleware usage
+5. Debugging real-world errors (state mutation, auth issues, deployment errors)
+6. Git & GitHub version control best practices
+7. Cloud deployment using Render
 
 ## Possible Future Improvements
 
-Rich text editor for notes
-
-Tags and categories
-
-Pagination & sorting
-
-Dark mode
-
-Note sharing between users
+- Rich text editor for notes
+- Tags and categories
+- Pagination & sorting
+- Dark mode
+- Note sharing between users
+---
 
 # 👨‍💻 Author
 
-Jay Parmar
+## Jay Parmar
 Final Year Computer Engineering Student
 Learning Full-Stack Development & Cloud Deployment
+---
 
-⭐ Support
+# ⭐ Support
 
 If you find this project helpful, feel free to ⭐ the repository.
